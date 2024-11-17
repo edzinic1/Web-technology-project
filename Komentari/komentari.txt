@@ -1,0 +1,5 @@
+2. zadatak
+Nije u potpunosti moguće namjestiti sve margine i razmake kao u gridu. 
+4. zadatak 
+Ekran se na velikim ekranima reda uz pomoć row dense, a na malom uz pomoć nth-child jer u ovom momentu nije moguće drugačije
+napraviti isti raspored kao na slici. 
