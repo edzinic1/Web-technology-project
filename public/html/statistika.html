@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistika</title>
+    <link rel="stylesheet" href="../Style/statistika.css">
+</head>
+<body>
+
+    <div class="form-container">
+        <h1>Statistika</h1>
+        
+        <label for="korisnik-input">Username:</label>
+        <input type="text" id="korisnik-input" placeholder="Ime korisnika">
+        <button id="search-button">Pretraži nekretnine</button>
+
+        <div id="moje-nekretnine"></div> 
+
+        <div id="period-container">
+            <div class="period-group">
+                <label for="start-year">Period: Od godine</label>
+                <input type="text" id="start-year" name="start-year" placeholder="Početna godina">
+                <label for="end-year">Do godine</label>
+                <input type="text" id="end-year" name="end-year" placeholder="Krajnja godina">
+            </div>
+        </div>
+
+        <div id="price-range-container">
+            <div class="price-range-group">
+                <label for="min-price">Raspon cijena: Od</label>
+                <input type="text" id="min-price" name="min-price" placeholder="Minimalna cijena">
+                <label for="max-price">Do</label>
+                <input type="text" id="max-price" name="max-price" placeholder="Maksimalna cijena">
+            </div>
+        </div>
+
+        <button id="add-period">Dodaj još perioda</button>
+        <button id="add-price-range">Dodaj još raspona</button>
+        <button id="draw-histogram">Iscrtaj histogram</button>
+    </div>
+
+  
+    <div id="chart-container">
+        <canvas id="price-histogram"></canvas>
+    </div>
+
+    
+    <div id="average-area-result"></div>
+  
+    <div class="outlier-form">
+        <label for="kriterij">Izaberite kriterij:</label>
+        <select id="kriterij" name="kriterij">
+           
+            <option value="tip_nekretnine">tip nekretine</option>
+            <option value="min_kvadratura">minimalna kvadratura</option>
+            <option value="max_kvadratuta">maksimalna kvadratura</option>
+            <option value="min_cijena">minimalna cijena</option>
+            <option value="max_cijenaa">maksimalna cijena</option>
+           
+        </select>
+        <label for="vrijednost">Unesite vrijednost:</label>
+        <input type="text" id="vrijednost" placeholder="Unesite vrijednost">
+        <label for="svojstvo">Naziv svojstva:</label>
+        <select id="svojstvo" name="svojstvo">
+     
+            <option value="id">id</option>
+            <option value="kvadratura">kvadratura</option>
+            <option value="cijena">cijena</option>
+            <option value="godina_izgradnje">godina izgradnje</option>
+           
+        </select>
+        
+        <button id="outlierButton">Izračunaj outlier</button>
+    </div>
+
+    <div id="outlierResults" class="outlier-results">
+       
+    </div>
+
+
+    <div class="prosjecna-kvadratura-form">
+        <label for="kriterij">Izaberite kriterij:</label>
+        <select id="kriterij" name="kriterij">
+            <option value="tip_nekretnine">Tip nekretnine</option>
+            <option value="min_kvadratura">Minimalna kvadratura</option>
+            <option value="max_kvadratura">Maksimalna kvadratura</option>
+            <option value="min_cijena">Minimalna cijena</option>
+            <option value="max_cijena">Maksimalna cijena</option>
+        </select>
+    
+       
+        <div id="value-container">
+            <label for="vrijednost1">Unesite vrijednost:</label>
+            <input type="text" id="vrijednost1" placeholder="Unesite vrijednost">
+        </div>
+    
+        <button id="calculate-average-area">Izračunaj prosječnu kvadraturu</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../Scripts/SpisakNekretnina.js"></script>
+    <script src="../Scripts/StatistikaNekretnina.js"></script>
+    <script src="../Scripts/statistika.js"></script>
+</body>
+</html>

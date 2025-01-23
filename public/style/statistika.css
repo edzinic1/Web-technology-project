@@ -1,0 +1,147 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+.form-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+h1 {
+    text-align: center;
+}
+
+.period-group, .price-range-group {
+    margin-bottom: 15px;
+}
+
+input[type="text"] {
+    padding: 5px;
+    margin-left: 10px;
+    width: 150px;
+    display: inline-block;
+}
+
+button {
+    padding: 10px 15px;
+    margin: 10px 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#add-period, #add-price-range {
+    background-color: #008CBA;
+    color: white;
+}
+
+#draw-histogram {
+    background-color: #f44336;
+    color: white;
+}
+.upit {
+    border: 1px solid #ddd; 
+    padding: 10px; 
+    margin-bottom: 15px; 
+    background-color: #f9f9f9; 
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+}
+
+
+.upit p {
+    font-size: 14px; 
+    color: #333; 
+}
+
+
+.outlier-results {
+    margin: 20px;
+    padding: 20px;
+    background-color: #f0f0f0;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+.outlier-result-box {
+    background-color: #ffffff;
+    padding: 20px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    width: 100%;
+    max-width: 600px; 
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+.outlier-result-box h3 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+
+.outlier-result-box ul {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 15px;
+}
+
+.outlier-result-box li {
+    font-size: 16px;
+    color: #555;
+    margin: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.outlier-result-box li strong {
+    font-weight: bold;
+    color: #333;
+}
+
+
+.outlier-no-result {
+    text-align: center;
+    font-size: 18px;
+    color: #f44336;
+    background-color: #f9e0e0;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+
+.outlier-form button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.outlier-form button:hover {
+    background-color: #0056b3;
+}
+.prosjecna-kvadratura-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;  
+    justify-content: center; 
+    text-align: center; 
+}
+
+.prosjecna-kvadratura-form button {
+    margin-top: 20px; 
+}
