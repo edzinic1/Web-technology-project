@@ -11,6 +11,11 @@ function onDOMContentLoaded() {
     const prevBtn = document.querySelector('.carousel-button.prev');
     const nextBtn = document.querySelector('.carousel-button.next');
 
+     // Ekstrahujemo ID nekretnine iz URL-a
+     const params = new URLSearchParams(window.location.search);
+     const X = params.get('id'); // ID nekretnine iz URL-a
+ 
+
     function prikaziUpite(upiti) {
         upitiContainer.innerHTML = upiti.map(upit =>
             `<div class="upit"><p>${upit.tekst_upita}</p></div>`
@@ -21,7 +26,7 @@ function onDOMContentLoaded() {
         if (isLoading || allUpitiLoaded) return;
         isLoading = true;
 
-        PoziviAjax.getNextUpiti(nekretnina_id = 1, stranica, (error, noviUpiti) => {
+        PoziviAjax.getNextUpiti(X, stranica, (error, noviUpiti) => {
             if (error) {
                 console.error("Greška pri učitavanju novih upita:", error);
             } else {
