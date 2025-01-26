@@ -53,7 +53,43 @@ async function initialize() {
     }
   });
 
-  console.log("Korisnici su dodani ako nisu već postojali.");
+ 
+ const nekretnine = [
+  {
+    tip_nekretnine: "Stan",
+    naziv: "Useljiv stan Sarajevo",
+    kvadratura: 58,
+    cijena: 232000,
+    tip_grijanja: "plin",
+    lokacija: "Novo Sarajevo",
+    godina_izgradnje: 2019,
+    datum_objave: new Date("2023-10-01"), 
+    opis: "Sociis natoque penatibus."
+  },
+  {
+    tip_nekretnine: "Poslovni prostor",
+    naziv: "Mali poslovni prostor",
+    kvadratura: 20,
+    cijena: 70000,
+    tip_grijanja: "struja",
+    lokacija: "Centar",
+    godina_izgradnje: 2005,
+    datum_objave: new Date("2023-08-20"), 
+    opis: "Magnis dis parturient montes."
+  }
+];
+
+
+
+for (const nekretnina of nekretnine) {
+  await db.nekretnina.findOrCreate({
+    where: { naziv: nekretnina.naziv },  
+    defaults: nekretnina                
+  });
+}
+
+console.log("Korisnici i nekretnine su dodani ako nisu već postojali.");
+
 }
 
 app.use(express.static(__dirname + '/public'));
