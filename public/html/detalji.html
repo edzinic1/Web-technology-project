@@ -29,29 +29,36 @@
             <p><strong>Datum objave oglasa:</strong> 2022</p>
         </div>
         <div id="opis">
-            <p><strong>Opis:</strong> Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore dignissimos eos
-                tempore, mollitia doloribus vitae molestiae ullam ut repudiandae alias corrupti, rem nisi officia at
-                perferendis dolorum iusto dolores nobis!</p>
+            <p><strong>Opis:</strong> Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore dignissimos eos tempore, mollitia doloribus vitae molestiae ullam ut repudiandae alias corrupti, rem nisi officia at perferendis dolorum iusto dolores nobis!</p>
         </div>
     </div>
 
     <h3>TOP 5 NEKRETNINA</h3>
     <div id="top5-nekretnine"></div>
 
-    <h3>UPITI</h3>
-    <div id="upiti">
-        <div class="upit">
-            <p><strong>Username 1:</strong></p>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque et architecto maiores consequuntur soluta
-                voluptas, molestias libero illo minus obcaecati pariatur provident ipsum id dicta quod. Eveniet ipsum
-                iure ullam?</p>
-        </div>
+   
+    <div id="dropdown-container">
+        <label for="dropdownMenu">Izaberite tip interesovanja:</label>
+        <select id="dropdownMenu">
+            <option value="">Odaberite...</option>
+            <option value="ponude">Ponude</option>
+            <option value="zahtjevi">Zahtjev</option>
+            <option value="upiti">Upit</option>
+        </select>
     </div>
 
-    <button class="carousel-button prev">Prethodni upit</button>
-    <button class="carousel-button next">Sledeći upit</button>
+   
+    <div id="formaInteresovanja"></div>
 
+   
+    <div id="table-container"></div>
 
+   
+    <div id="upit-container" style="display: none; margin-top: 20px;">
+        <label for="upit-text">Unesite upit:</label>
+        <textarea id="upit-text" rows="4" cols="50" placeholder="Unesite svoj upit ovde..."></textarea>
+        <button id="submit-upit" style="margin-top: 10px;">Pošaljite upit</button>
+    </div>
 
     <script src="../Scripts/PoziviAjax.js"></script>
     <script src="../Scripts/detalji.js"></script>

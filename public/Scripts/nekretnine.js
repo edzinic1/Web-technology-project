@@ -1,10 +1,6 @@
 function spojiNekretnine(divReferenca, instancaModula, tip_nekretnine) {
-    // pozivanje metode za filtriranje
     const filtriraneNekretnine = instancaModula.filtrirajNekretnine({ tip_nekretnine: tip_nekretnine });
 
-    // iscrtavanje elemenata u divReferenca element
-
-    // Ciscenje svih elemenata liste
     divReferenca.innerHTML = '';
 
     if (filtriraneNekretnine.length === 0) {
@@ -24,17 +20,6 @@ function spojiNekretnine(divReferenca, instancaModula, tip_nekretnine) {
                 nekretninaElement.classList.add('nekretnina', 'pp');
                 nekretninaElement.id = `${nekretnina.id}`;
             }
-
-            // Added search and click count divs
-            const pretrageDiv = document.createElement('div');
-            pretrageDiv.id = `pretrage-${nekretnina.id}`;
-            pretrageDiv.textContent = `pretrage: ${nekretnina.pretrage || 0}`;
-            nekretninaElement.appendChild(pretrageDiv);
-
-            const klikoviDiv = document.createElement('div');
-            klikoviDiv.id = `klikovi-${nekretnina.id}`;
-            klikoviDiv.textContent = `klikovi: ${nekretnina.klikovi || 0}`;
-            nekretninaElement.appendChild(klikoviDiv);
 
             const slikaElement = document.createElement('img');
             slikaElement.classList.add('slika-nekretnine');
@@ -56,24 +41,23 @@ function spojiNekretnine(divReferenca, instancaModula, tip_nekretnine) {
             nekretninaElement.appendChild(cijenaElement);
 
             const detaljiDugme = document.createElement('a');
-            //detaljiDugme.href = '../HTML/detalji.html'; // hardkodiran html
             detaljiDugme.classList.add('detalji-dugme');
             detaljiDugme.textContent = 'Detalji';
             detaljiDugme.addEventListener('click', function () {
                 const idNekretnine = nekretnina.id;
-                MarketingAjax.klikNekretnina(idNekretnine);
+                console.log("Kliknuto na dugme za nekretninu s ID-jem:", idNekretnine); // Log za praćenje
+                localStorage.setItem('odabranaNekretnina', idNekretnine);
+                window.location.href = `../HTML/detalji.html?id=${idNekretnine}`;
             });
             nekretninaElement.appendChild(detaljiDugme);
 
-            // Dodavanje kreiranog elementa u divReferenci
             divReferenca.appendChild(nekretninaElement);
         });
     }
 }
 
-const listaNekretnina = []
-
-const listaKorisnika = []
+const listaNekretnina = [];
+const listaKorisnika = [];
 
 const divStan = document.getElementById("stan");
 const divKuca = document.getElementById("kuca");
@@ -96,36 +80,3 @@ PoziviAjax.getNekretnine((error, listaNekretnina) => {
         spojiNekretnine(divPp, nekretnine, "Poslovni prostor");
     }
 });
-
-function filtrirajNekretnine(filtriraneNekretnine) {
-    const filtriraneNekretnineInstance = SpisakNekretnina();
-    filtriraneNekretnineInstance.init(filtriraneNekretnine, listaKorisnika);
-
-    spojiNekretnine(divStan, filtriraneNekretnineInstance, "Stan");
-    spojiNekretnine(divKuca, filtriraneNekretnineInstance, "Kuća");
-    spojiNekretnine(divPp, filtriraneNekretnineInstance, "Poslovni prostor");
-}
-
-function filtrirajOnClick() {
-    const kriterij = {
-        min_cijena: parseFloat(document.getElementById('minCijena').value) || 0,
-        max_cijena: parseFloat(document.getElementById('maxCijena').value) || Infinity,
-        min_kvadratura: parseFloat(document.getElementById('minKvadratura').value) || 0,
-        max_kvadratura: parseFloat(document.getElementById('maxKvadratura').value) || Infinity
-    };
-
-    const filtriraneNekretnine = nekretnine.filtrirajNekretnine(kriterij);
-
-    MarketingAjax.novoFiltriranje(
-        filtriraneNekretnine.map(nekretnina => nekretnina.id)
-    );
-
-    filtrirajNekretnine(filtriraneNekretnine);
-}
-
-document.getElementById('dugmePretraga').addEventListener('click', filtrirajOnClick);
-
-setInterval(() => {
-    MarketingAjax.osvjeziPretrage(document.getElementById('divNekretnine'));
-    MarketingAjax.osvjeziKlikove(document.getElementById('divNekretnine'));
-}, 500);

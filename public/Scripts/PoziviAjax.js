@@ -261,6 +261,85 @@ const PoziviAjax = (() => {
             }
         });
     }
+    function impl_getInteresovanja(nekretnina_id, fnCallback) {
+        if (!nekretnina_id) {
+            return fnCallback({ status: 400, statusText: 'ID nekretnine nije naveden.' }, null);
+        }
+    
+        const url = `/nekretnina/${encodeURIComponent(nekretnina_id)}/interesovanja`;
+        ajaxRequest('GET', url, null, (error, data) => {
+            if (error) {
+                fnCallback(error, null);
+            } else {
+                try {
+                    const interesovanja = JSON.parse(data);
+                    fnCallback(null, interesovanja);
+                } catch (parseError) {
+                    fnCallback({ status: 500, statusText: 'Greška pri parsiranju podataka.' }, null);
+                }
+            }
+        });
+    }
+
+    function impl_postDodajPonudu(nekretninaId, ponudaPodaci, fnCallback) {
+        if (!nekretninaId || !ponudaPodaci) {
+            return fnCallback({ status: 400, statusText: 'Nedostaju podaci za dodavanje ponude.' }, null);
+        }
+    
+        const url = `/nekretnina/${encodeURIComponent(nekretninaId)}/ponuda`;
+        ajaxRequest('POST', url, ponudaPodaci, (error, data) => {
+            if (error) {
+                fnCallback(error, null);
+            } else {
+                try {
+                    const novaPonuda = JSON.parse(data);
+                    fnCallback(null, novaPonuda);
+                } catch (parseError) {
+                    fnCallback({ status: 500, statusText: 'Greška pri parsiranju odgovora servera.' }, null);
+                }
+            }
+        });
+    }
+    function impl_postDodajZahtjev(nekretninaId, zahtjevPodaci, fnCallback) {
+        if (!nekretninaId || !zahtjevPodaci) {
+            return fnCallback({ status: 400, statusText: 'ID nekretnine ili podaci zahtjeva nisu navedeni.' }, null);
+        }
+    
+        const url = `/nekretnina/${encodeURIComponent(nekretninaId)}/zahtjev`;
+    
+        ajaxRequest('POST', url, zahtjevPodaci, (error, data) => {
+            if (error) {
+                fnCallback(error, null);
+            } else {
+                try {
+                    const noviZahtjev = JSON.parse(data);
+                    fnCallback(null, noviZahtjev);
+                } catch (parseError) {
+                    fnCallback({ status: 500, statusText: 'Greška pri parsiranju odgovora servera.' }, null);
+                }
+            }
+        });
+    }
+    function impl_putAzurirajZahtjev(nekretninaId, zahtjevId, zahtjevPodaci, fnCallback) {
+        if (!nekretninaId || !zahtjevId || !zahtjevPodaci) {
+            return fnCallback({ status: 400, statusText: 'Nedostaju potrebni parametri za ažuriranje zahtjeva.' }, null);
+        }
+    
+        const url = `/nekretnina/${encodeURIComponent(nekretninaId)}/zahtjev/${encodeURIComponent(zahtjevId)}`;
+    
+        ajaxRequest('PUT', url, zahtjevPodaci, (error, data) => {
+            if (error) {
+                fnCallback(error, null);
+            } else {
+                try {
+                    const azuriranZahtjev = JSON.parse(data);
+                    fnCallback(null, azuriranZahtjev);
+                } catch (parseError) {
+                    fnCallback({ status: 500, statusText: 'Greška pri parsiranju odgovora servera.' }, null);
+                }
+            }
+        });
+    }
     
 
     return {
@@ -273,6 +352,10 @@ const PoziviAjax = (() => {
         getTop5Nekretnina: impl_getTop5Nekretnina,
         getMojiUpiti: impl_getMojiUpiti,
         getNextUpiti: impl_getNextUpiti,
-        getNekretnina: impl_getNekretnina
+        getNekretnina: impl_getNekretnina,
+        getInteresovanja: impl_getInteresovanja,
+        postDodajPonudu: impl_postDodajPonudu,
+        postDodajZahtjev: impl_postDodajZahtjev,
+        putAzurirajZahtjev: impl_putAzurirajZahtjev
     };
 })();

@@ -1,94 +1,136 @@
-document.addEventListener('DOMContentLoaded', onDOMContentLoaded);
+document.addEventListener("DOMContentLoaded", onDOMContentLoaded);
 
 function onDOMContentLoaded() {
-    let trenutnaStranica = 1;
-    const prikaziBrojUpita = 3;
-    let isLoading = false;
-    let allUpitiLoaded = false;
-    let allUpiti = [];
+    const urlParams = new URLSearchParams(window.location.search);
+    const nekretninaId = urlParams.get("id");
 
-    const upitiContainer = document.getElementById("upiti");
-    const prevBtn = document.querySelector('.carousel-button.prev');
-    const nextBtn = document.querySelector('.carousel-button.next');
-
-    function prikaziUpite(upiti) {
-        upitiContainer.innerHTML = upiti.map(upit =>
-            `<div class="upit"><p>${upit.tekst_upita}</p></div>`
-        ).join('');
+    if (!nekretninaId) {
+        console.error("ID nekretnine nije pronađen u URL-u!");
+        return;
     }
 
-    function ucitajUpite(stranica, nekretnina_id) {
-        if (isLoading || allUpitiLoaded) return;
-        isLoading = true;
+    const interesovanjaContainer = document.getElementById("table-container");
+    const upitContainer = document.getElementById("upit-container");
 
-        PoziviAjax.getNextUpiti(nekretnina_id = 1, stranica, (error, noviUpiti) => {
+    let logovanKorisnik = null;
+
+    
+    PoziviAjax.getKorisnik((error, korisnik) => {
+        if (error) {
+            console.error("Greška pri učitavanju korisnika:", error);
+            return;
+        }
+
+        logovanKorisnik = korisnik;
+        console.log("Trenutni korisnik:", logovanKorisnik);
+
+        
+        ucitajInteresovanja(nekretninaId, logovanKorisnik);
+    });
+
+    
+    function ucitajInteresovanja(nekretninaId, korisnik) {
+        PoziviAjax.getInteresovanja(nekretninaId, (error, interesovanja) => {
             if (error) {
-                console.error("Greška pri učitavanju novih upita:", error);
-            } else {
-                if (noviUpiti.length > 0) {
-                    allUpiti = allUpiti.concat(noviUpiti);
-                    prikaziUpite(noviUpiti);
-                    trenutnaStranica = stranica;
-                    if (noviUpiti.length < prikaziBrojUpita) {
-                        allUpitiLoaded = true;
-                    }
-                } else {
-                    allUpitiLoaded = true;
-                }
+                console.error("Greška pri učitavanju interesovanja:", error);
+                interesovanjaContainer.innerHTML = `<p>Greška prilikom učitavanja podataka.</p>`;
+                return;
             }
-            isLoading = false;
+
+           
+            if (interesovanja.ponude) {
+                interesovanjaContainer.innerHTML += generatePonudeHTML(interesovanja.ponude, korisnik);
+            }
+
+            
+            if (interesovanja.zahtjevi) {
+                interesovanjaContainer.innerHTML += generateZahtjeviHTML(interesovanja.zahtjevi, korisnik);
+            }
+
+            
+            if (interesovanja.upiti) {
+                interesovanjaContainer.innerHTML += generateUpitiHTML(interesovanja.upiti);
+            }
         });
     }
 
-    nextBtn.addEventListener('click', function () {
-        if (allUpitiLoaded) {
-            if ((trenutnaStranica * prikaziBrojUpita) < allUpiti.length) {
-                trenutnaStranica++;
-                prikaziUpite(allUpiti.slice((trenutnaStranica - 1) * prikaziBrojUpita, trenutnaStranica * prikaziBrojUpita));
+    
+    function generatePonudeHTML(ponude, korisnik) {
+        let html = "<h3>Ponude</h3><table><thead><tr><th>ID</th><th>Tekst ponude</th><th>Status</th></tr></thead><tbody>";
+        ponude.forEach(ponuda => {
+            if (korisnik.admin || ponuda.korisnikId === korisnik.id) {
+                html += `
+                    <tr>
+                        <td>${ponuda.id}</td>
+                        <td>${ponuda.tekst}</td>
+                        <td>${ponuda.odbijenaPonuda ? 'Odbijena' : 'Odobrena' }</td>
+                    </tr>
+                `;
             }
-        } else {
-            if ((trenutnaStranica * prikaziBrojUpita) < allUpiti.length) {
-                trenutnaStranica++;
-                prikaziUpite(allUpiti.slice((trenutnaStranica - 1) * prikaziBrojUpita, trenutnaStranica * prikaziBrojUpita));
-            } else {
-                ucitajUpite(trenutnaStranica + 1);
+        });
+        html += "</tbody></table>";
+        return html;
+    }
+
+    
+    function generateZahtjeviHTML(zahtjevi, korisnik) {
+        let html = "<h3>Zahtjevi</h3><table><thead><tr><th>ID</th><th>Tekst zahtjeva</th><th>Datum</th><th>Status</th></tr></thead><tbody>";
+        zahtjevi.forEach(zahtjev => {
+            if (korisnik.admin || zahtjev.korisnikId === korisnik.id || zahtjev.vezaniZaKorisnikaId === korisnik.id) {
+                html += `
+                    <tr data-id="${zahtjev.id}" class="interesovanje-row">
+                        <td>${zahtjev.id}</td>
+                        <td>${zahtjev.tekst}</td>
+                        <td>${zahtjev.trazeniDatum}</td>
+                        <td>${zahtjev.odobreno ? 'Odobren' : 'Odbijen'}</td>
+                    </tr>
+                `;
             }
-        }
-    });
+        });
+        html += "</tbody></table>";
+        return html;
+    }
 
-    prevBtn.addEventListener('click', function () {
-        if (trenutnaStranica > 1) {
-            trenutnaStranica--;
-            prikaziUpite(allUpiti.slice((trenutnaStranica - 1) * prikaziBrojUpita, trenutnaStranica * prikaziBrojUpita));
-        }
-    });
+    
+    function generateUpitiHTML(upiti) {
+        let html = "<h3>Upiti</h3><table><thead><tr><th>ID</th><th>Tekst upita</th></tr></thead><tbody>";
+        upiti.forEach(upit => {
+            html += `
+                <tr data-id="${upit.id}" class="interesovanje-row">
+                    <td>${upit.id}</td>
+                    <td>${upit.tekst}</td>
+                </tr>
+            `;
+        });
+        html += "</tbody></table>";
+        return html;
+    }
 
-    ucitajUpite(trenutnaStranica);
+    
+    document.addEventListener("click", function (event) {
+        if (event.target.closest(".interesovanje-row")) {
+            const selectedRow = event.target.closest(".interesovanje-row");
+            const id = selectedRow.getAttribute("data-id");
 
-    const lokacijaLink = document.getElementById('lokacija');
-    const top5Container = document.getElementById('top5-nekretnine');
+            
+            upitContainer.style.display = "block";
 
-    lokacijaLink.addEventListener('click', function (event) {
-        event.preventDefault();
-        const lokacija = lokacijaLink.textContent.trim();
-
-        PoziviAjax.getTop5Nekretnina(lokacija, (error, nekretnine) => {
-            if (error) {
-                top5Container.innerHTML = `<p>Greška: ${error.statusText}</p>`;
-            } else {
-                if (nekretnine.length === 0) {
-                    top5Container.innerHTML = "<p>Nema dostupnih nekretnina za prikaz.</p>";
-                } else {
-                    const list = document.createElement('ul');
-                    nekretnine.forEach((nekretnina) => {
-                        const item = document.createElement('li');
-                        item.textContent = `${nekretnina.naziv} - ${nekretnina.cijena} KM`;
-                        list.appendChild(item);
+            
+            const submitUpitButton = document.getElementById("submit-upit");
+            submitUpitButton.onclick = function () {
+                const upitText = document.getElementById("upit-text").value;
+                if (upitText.trim()) {
+                    console.log(`Poslat upit za ID ${id}: ${upitText}`);
+                    
+                    PoziviAjax.posaljiteUpit(id, upitText, (error, response) => {
+                        if (error) {
+                            console.error("Greška pri slanju upita:", error);
+                        } else {
+                            console.log("Upit je uspešno poslat!", response);
+                        }
                     });
-                    top5Container.innerHTML = '';
-                    top5Container.appendChild(list);
                 }
-            }
-        });
+            };
+        }
     });
 }
