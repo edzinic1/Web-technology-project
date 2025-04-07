@@ -9,8 +9,8 @@ const app = express();
 const PORT = 3000;
 
 app.use('/Scripts', express.static('Scripts')); 
-app.use("/css", express.static(path.join(__dirname, "public/css")));
-app.use("/scripts", express.static(path.join(__dirname, "public/scripts")));
+app.use("/style", express.static(path.join(__dirname, "public/style")));
+app.use("/Scripts", express.static(path.join(__dirname, "public/Scripts")));
 app.use(express.static(path.join(__dirname, "public/html")));
 
 

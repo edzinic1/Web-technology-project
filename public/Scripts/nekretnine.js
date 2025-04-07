@@ -47,7 +47,7 @@ function spojiNekretnine(divReferenca, instancaModula, tip_nekretnine) {
                 const idNekretnine = nekretnina.id;
                 console.log("Kliknuto na dugme za nekretninu s ID-jem:", idNekretnine); // Log za praćenje
                 localStorage.setItem('odabranaNekretnina', idNekretnine);
-                window.location.href = `../HTML/detalji.html?id=${idNekretnine}`;
+                window.location.href = `../html/detalji.html?id=${idNekretnine}`;
             });
             nekretninaElement.appendChild(detaljiDugme);
 
